@@ -10,6 +10,9 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  application:
+    name: "Flight Service"
+    version: "1.0"
 #
 #eureka:
 #  client:

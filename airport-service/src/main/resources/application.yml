@@ -5,6 +5,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/airport
+  application:
+    name: "Airport Service"
+    version: "1.0"
 
 #eureka:
 #  client:
