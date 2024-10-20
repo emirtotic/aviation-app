@@ -1,0 +1,5 @@
+# Project exclude paths
+/airport-service/target/
+/eureka-server/target/
+/flight-service/target/
+/plane-service/target/
