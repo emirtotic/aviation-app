@@ -3,6 +3,7 @@ package com.plane.service.impl;
 import com.plane.dto.PlaneDTO;
 import com.plane.entity.Plane;
 import com.plane.entity.PlaneType;
+import com.plane.exception.PlaneNotFoundException;
 import com.plane.mapper.PlaneMapper;
 import com.plane.repository.PlaneRepository;
 import com.plane.service.PlaneService;
@@ -85,7 +86,7 @@ public class PlaneServiceImpl implements PlaneService {
     public PlaneDTO updatePlane(Long id, PlaneDTO updatedPlane) {
 
         Plane plane = planeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Plane not found with ID: " + id));
+                .orElseThrow(() -> new PlaneNotFoundException(id));
 
         plane.setModel(updatedPlane.getModel());
         plane.setCapacity(updatedPlane.getCapacity());
@@ -102,7 +103,7 @@ public class PlaneServiceImpl implements PlaneService {
     public String deletePlane(Long id) {
 
         Plane plane = planeRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Plane not found!"));
+                        .orElseThrow(() -> new PlaneNotFoundException(id));
 
         planeRepository.deleteById(id);
         return "Plane successfully deleted with ID: " + id;
