@@ -97,6 +97,17 @@ public class PlaneServiceImpl implements PlaneService {
 
     }
 
+    @Override
+    @CacheEvict(value = "planes", key = "#id")
+    public String deletePlane(Long id) {
+
+        Plane plane = planeRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Plane not found!"));
+
+        planeRepository.deleteById(id);
+        return "Plane successfully deleted with ID: " + id;
+    }
+
     public PlaneType convertStringToPlaneType(String type) {
         if (type != null) {
             try {

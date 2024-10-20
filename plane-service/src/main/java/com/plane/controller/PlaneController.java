@@ -65,5 +65,12 @@ public class PlaneController {
         return new ResponseEntity<>(newPlane, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deletePlane(@RequestParam Long id) {
+
+        String result = planeService.deletePlane(id);
+
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
 
 }

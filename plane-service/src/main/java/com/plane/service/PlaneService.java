@@ -18,4 +18,6 @@ public interface PlaneService {
 
     PlaneDTO updatePlane(Long id, PlaneDTO updatedPlane);
 
+    String deletePlane(Long id);
+
 }
