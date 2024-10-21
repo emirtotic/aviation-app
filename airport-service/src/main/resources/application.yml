@@ -9,6 +9,10 @@ spring:
     name: "Airport Service"
     version: "1.0"
 
+rapidAirportApiUrl: "https://airports-runways-and-airlines-worldwide-api.p.rapidapi.com/airports/list?country="
+x-rapidapi-key: "ea08dd8f6cmsh57c2abcad6981b1p1eefb5jsn2534752b6054"
+x-airport-rapidapi-host: "airports-runways-and-airlines-worldwide-api.p.rapidapi.com"
+
 #eureka:
 #  client:
 #    service-url:
