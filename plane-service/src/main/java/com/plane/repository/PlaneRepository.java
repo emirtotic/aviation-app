@@ -1,7 +1,7 @@
 package com.plane.repository;
 
 import com.plane.entity.Plane;
-import com.plane.entity.PlaneType;
+import com.plane.enums.PlaneType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

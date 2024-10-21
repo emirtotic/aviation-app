@@ -2,7 +2,7 @@ package com.plane.service.impl;
 
 import com.plane.dto.PlaneDTO;
 import com.plane.entity.Plane;
-import com.plane.entity.PlaneType;
+import com.plane.enums.PlaneType;
 import com.plane.exception.PlaneNotFoundException;
 import com.plane.mapper.PlaneMapper;
 import com.plane.repository.PlaneRepository;

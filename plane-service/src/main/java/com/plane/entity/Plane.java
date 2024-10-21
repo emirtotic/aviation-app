@@ -1,5 +1,6 @@
 package com.plane.entity;
 
+import com.plane.enums.PlaneType;
 import lombok.*;
 
 import javax.persistence.*;

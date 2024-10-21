@@ -1,4 +1,4 @@
-package com.plane.entity;
+package com.plane.enums;
 
 public enum PlaneType {
 

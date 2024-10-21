@@ -1,6 +1,6 @@
 package com.plane.dto;
 
-import com.plane.entity.PlaneType;
+import com.plane.enums.PlaneType;
 import lombok.*;
 
 import javax.validation.constraints.Min;
