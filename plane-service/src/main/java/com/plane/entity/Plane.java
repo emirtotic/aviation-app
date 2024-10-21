@@ -21,7 +21,7 @@ public class Plane {
     @Enumerated(EnumType.STRING)
     private PlaneType type;
     private String description;
-
+    private int averageSpeed;
 }
 
 

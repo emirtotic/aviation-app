@@ -27,4 +27,8 @@ public class PlaneDTO {
 
     @NotBlank(message = "Description cannot be empty.")
     private String description;
+
+    @Min(value = 250, message = "Wrong average speed value")
+    private int averageSpeed;;
+
 }
