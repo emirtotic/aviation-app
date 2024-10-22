@@ -8,6 +8,16 @@ spring:
   application:
     name: "Airport Service"
     version: "1.0"
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: airport-service-consumer-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
 
 rapidAirportApiUrl: "https://airports-runways-and-airlines-worldwide-api.p.rapidapi.com/airports/list?country="
 x-rapidapi-key: "ea08dd8f6cmsh57c2abcad6981b1p1eefb5jsn2534752b6054"

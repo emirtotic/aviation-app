@@ -13,6 +13,18 @@ spring:
   application:
     name: "Flight Service"
     version: "1.0"
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: flight-data-processing
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    topics:
+      flight-requests: flight-requests
+
 #
 #eureka:
 #  client:
