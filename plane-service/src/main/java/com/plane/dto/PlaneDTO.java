@@ -29,6 +29,6 @@ public class PlaneDTO {
     private String description;
 
     @Min(value = 250, message = "Wrong average speed value")
-    private int averageSpeed;;
+    private int averageSpeed;
 
 }
