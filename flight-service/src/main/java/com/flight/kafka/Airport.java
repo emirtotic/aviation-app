@@ -1,4 +1,4 @@
-package com.airport.dto;
+package com.flight.kafka;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class AirportDTO {
+public class Airport {
 
     private String name;
     private String iata;

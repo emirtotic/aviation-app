@@ -11,4 +11,5 @@ public interface AirportService {
     List<AirportDTO> findAllAirports();
     BigDecimal calculateDistanceBetweenAirportsInKm(String iata1, String iata2);
     BigDecimal calculateFlightDuration(String iata1, String iata2);
+    AirportDTO findAirportByIata(String iata);
 }

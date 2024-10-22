@@ -4,6 +4,7 @@ import com.airport.dto.AirportDTO;
 import com.airport.dto.AirportRestResponse;
 import com.airport.entity.Airport;
 import com.airport.exception.AirportNotFoundException;
+import com.airport.kafka.AirportKafkaConsumer;
 import com.airport.mapper.AirportMapper;
 import com.airport.repository.AirportRepository;
 import com.airport.service.AirportService;
@@ -75,6 +76,11 @@ public class AirportServiceImpl implements AirportService {
 
         return BigDecimal.valueOf(EARTH_RADIUS * c)
                 .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public AirportDTO findAirportByIata(String iata) {
+        return airportMapper.mapToDTO(airportRepository.findByIata(iata.toUpperCase()));
     }
 
     @Override
