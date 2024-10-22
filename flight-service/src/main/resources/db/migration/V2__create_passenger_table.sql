@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS flight.passenger
+CREATE TABLE IF NOT EXISTS flights.passenger
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,

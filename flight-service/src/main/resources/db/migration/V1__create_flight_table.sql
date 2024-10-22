@@ -1,6 +1,6 @@
-CREATE SCHEMA IF NOT EXISTS flight;
+CREATE SCHEMA IF NOT EXISTS flights;
 
-CREATE TABLE IF NOT EXISTS flight.flight
+CREATE TABLE IF NOT EXISTS flights.flight
 (
     id                BIGINT AUTO_INCREMENT PRIMARY KEY,
     plane_id          BIGINT       NOT NULL,
