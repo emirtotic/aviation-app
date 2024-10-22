@@ -13,5 +13,7 @@ public class PlaneResponse {
     private String flightCode;
     @JsonProperty("model")
     private String planeModel;
+    @JsonProperty("averageSpeed")
+    private String averageSpeed;
 
 }

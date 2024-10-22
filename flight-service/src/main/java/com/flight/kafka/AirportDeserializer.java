@@ -13,9 +13,9 @@ public class AirportDeserializer extends JsonDeserializer<Airport> {
     @Override
     public Airport deserialize(JsonParser jsonParser, DeserializationContext context)
             throws IOException, JsonProcessingException {
-        String airportJson = jsonParser.getText(); // Dobijamo string JSON
+        String airportJson = jsonParser.getText();
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(airportJson, Airport.class); // Deserializujemo u Airport objekat
+        return objectMapper.readValue(airportJson, Airport.class);
     }
 }
 

@@ -1,0 +1,203 @@
+package com.flight.service.impl;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flight.dto.FlightDto;
+import com.flight.dto.FlightRequest;
+import com.flight.entity.TopicResponse;
+import com.flight.kafka.*;
+import com.flight.mapper.FlightMapper;
+import com.flight.reposirory.FlightRepository;
+import com.flight.reposirory.TopicRepository;
+import com.flight.service.FlightService;
+import com.flight.service.TopicService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.CompletableFuture;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class FlightServiceImpl implements FlightService {
+
+    private final TopicRepository topicRepository;
+    @Value("${spring.kafka.topics.flight-requests}")
+    private String topic;
+
+    private final FlightRepository flightRepository;
+    private final FlightKafkaProducer flightKafkaProducer;
+    private final ObjectMapper objectMapper;
+    private final TopicService topicService;
+    private final FlightMapper flightMapper;
+
+    private final String AIRPORT_TOPIC = "airport-response";
+    private final String PLANE_TOPIC = "plane-response";
+    private static final int EARTH_RADIUS = 6371;
+    private CompletableFuture<TopicResponse> airportResponseFuture;
+    private CompletableFuture<TopicResponse> planeResponseFuture;
+
+
+    @Override
+    @Transactional
+    public FlightDto createFlight(FlightRequest flightRequest) {
+
+        airportResponseFuture = new CompletableFuture<>();
+        planeResponseFuture = new CompletableFuture<>();
+
+        flightKafkaProducer.sendFlightDetails(topic, flightRequest);
+
+        TopicResponse airportString = airportResponseFuture.join(); // Join will wait for the response
+        TopicResponse planeString = planeResponseFuture.join();
+
+//        TopicResponse airportString = topicService.findByFlightCodeAndTopic(flightRequest.getFlightCode(), AIRPORT_TOPIC);
+//        TopicResponse planeString = topicService.findByFlightCodeAndTopic(flightRequest.getFlightCode(), PLANE_TOPIC);
+
+        AirportApiResponse airportResponse;
+        PlaneResponse planeResponse;
+        try {
+            airportResponse = objectMapper.readValue(airportString.getResponse(), AirportApiResponse.class);
+            planeResponse = objectMapper.readValue(planeString.getResponse(), PlaneResponse.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (airportResponse != null && planeResponse != null) {
+
+            FlightDto flightDto = createFlightResponseAssembler(planeResponse, airportResponse);
+            flightRepository.save(flightMapper.mapToEntity(flightDto));
+
+            return flightDto;
+        }
+
+        throw new RuntimeException();
+
+    }
+
+    @KafkaListener(topics = AIRPORT_TOPIC, groupId = "airport-service-consumer-group")
+    public void listenAirportResponse(String response) {
+
+        System.out.println("Received airport response: " + response);
+
+        try {
+            AirportResponse airportResponse = objectMapper.readValue(response, AirportResponse.class);
+            System.out.println("");
+
+            TopicResponse airportTopicResponse = new TopicResponse();
+            airportTopicResponse.setFlightCode(airportResponse.getFlightCode());
+            airportTopicResponse.setTopic(AIRPORT_TOPIC);
+            airportTopicResponse.setResponse(response);
+
+            topicRepository.save(airportTopicResponse);
+            airportResponseFuture.complete(airportTopicResponse);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @KafkaListener(topics = PLANE_TOPIC, groupId = "plane-service-consumer-group")
+    public void listenPlaneResponse(String response) {
+        System.out.println("Received plane response: " + response);
+
+        try {
+            PlaneResponse planeResponse = objectMapper.readValue(response, PlaneResponse.class);
+
+            TopicResponse planeTopicResponse = new TopicResponse();
+            planeTopicResponse.setFlightCode(planeResponse.getFlightCode());
+            planeTopicResponse.setTopic(PLANE_TOPIC);
+            planeTopicResponse.setResponse(response);
+
+            topicRepository.save(planeTopicResponse);
+            planeResponseFuture.complete(planeTopicResponse);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private BigDecimal calculateDistanceBetweenAirportsInKm(Airport departure, Airport arrival) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Calculating distance between ")
+                .append(departure.getName()).append(" [")
+                .append(departure.getCountry()).append("] ")
+                .append("and ")
+                .append(arrival.getName()).append(" [")
+                .append(arrival.getCountry()).append("]");
+
+        log.info(sb.toString());
+
+        double deltaLat = Math.toRadians(arrival.getLatitude() - departure.getLatitude());
+        double deltaLon = Math.toRadians(arrival.getLongitude() - departure.getLongitude());
+
+        double a = haversineFormula(deltaLat, deltaLon, departure, arrival);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return BigDecimal.valueOf(EARTH_RADIUS * c)
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private BigDecimal calculateFlightDuration(Airport departure, Airport arrival, int averagePlaneSpeed) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Calculating flight duration between ")
+                .append(departure.getName()).append(" [")
+                .append(departure.getCountry()).append("] ")
+                .append("and ")
+                .append(arrival.getName()).append(" [")
+                .append(arrival.getCountry()).append("]");
+
+        log.info(sb.toString());
+
+        BigDecimal distance = calculateDistanceBetweenAirportsInKm(departure, arrival);
+
+        double flightDurationHours = Double.valueOf(distance.doubleValue()) / averagePlaneSpeed;
+
+        return BigDecimal.valueOf(flightDurationHours).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private double haversineFormula(double deltaLat, double deltaLon, Airport airport1, Airport airport2) {
+
+        return Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                Math.cos(Math.toRadians(airport1.getLatitude())) * Math.cos(Math.toRadians(airport2.getLatitude())) *
+                        Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+    }
+
+    private FlightDto createFlightResponseAssembler(PlaneResponse planeResponse, AirportApiResponse airportResponse) {
+
+        FlightDto flightDto = new FlightDto();
+
+        int averagePlaneSpeed = Integer.parseInt(planeResponse.getAverageSpeed());
+
+        flightDto.setPlaneModel(planeResponse.getPlaneModel());
+        flightDto.setDepartureAirport(airportResponse.getDepartureAirport().getName());
+        flightDto.setArrivalAirport(airportResponse.getArrivalAirport().getName());
+        flightDto.setCreatedAt(new Date());
+        flightDto.setDepartureTime(new Date());
+        flightDto.setArrivalTime(new Date());
+        flightDto.setCompany("KLM");
+        flightDto.setAveragePlaneSpeed(averagePlaneSpeed);
+
+        flightDto.setFlightDistance(calculateDistanceBetweenAirportsInKm(
+                airportResponse.getDepartureAirport(),
+                airportResponse.getArrivalAirport()));
+
+        flightDto.setFlightDuration(calculateFlightDuration(
+                airportResponse.getDepartureAirport(),
+                airportResponse.getArrivalAirport(),
+                averagePlaneSpeed) );
+
+        flightDto.setPassengers(new ArrayList<>());
+
+        return flightDto;
+    }
+}

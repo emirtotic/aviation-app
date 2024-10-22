@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
-@Table(schema = "flight", name = "passenger")
+@Table(schema = "flights", name = "passenger")
 public class Passenger {
 
     @Id
