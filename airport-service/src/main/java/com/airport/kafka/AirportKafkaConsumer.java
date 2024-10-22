@@ -31,15 +31,11 @@ public class AirportKafkaConsumer {
             flightApiResponse.setArrivalAirport(objectMapper.writeValueAsString(arrival));
             flightApiResponse.setDepartureAirport(objectMapper.writeValueAsString(departure));
 
-            System.out.println("AIRPORT = POZVANO");
-
             kafkaTemplate.send("airport-response", objectMapper.writeValueAsString(flightApiResponse));
             log.info("Sent to Flight service " + objectMapper.writeValueAsString(flightApiResponse));
 
 
-            // Možeš dodati logiku za dobijanje informacija o aerodromu
         } catch (Exception e) {
-            // Obradi grešku
             e.printStackTrace();
         }
     }
