@@ -17,6 +17,7 @@
         <module>airport-service</module>
         <module>flight-service</module>
         <module>eureka-server</module>
+        <module>company-service</module>
     </modules>
 
     <dependencyManagement>
