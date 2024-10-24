@@ -1,9 +1,9 @@
 server:
-  port: 8082
+  port: 8083
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/flights
+    url: jdbc:mysql://localhost:3306/companies
     username: root
     password: 12345678
   jpa:
@@ -12,26 +12,41 @@ spring:
     show-sql: true
   flyway:
     enabled: true
+
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=100, expireAfterAccess=5m
+
   application:
-    name: "Flight Service"
+    name: "Company Service"
     version: "1.0"
+
+  springdoc:
+    swagger-ui:
+      path: /swagger-ui.html
+
   kafka:
     bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      group-id: flight-data-processing
+      group-id: company-service-consumer-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    topics:
-      flight-requests: flight-requests
-      airport-response: airport-response
-      plane-response: plane-response
-      company-response: company-response
 
-#
-#eureka:
+
+logging:
+  level:
+    org.springframework.cache: TRACE
+
+
+
+  #eureka:
 #  client:
 #    service-url:
 #      defaultZone: http://localhost:8761/eureka/
+
+
+
