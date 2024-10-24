@@ -22,7 +22,6 @@ public class Flight {
     private Long id;
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Passenger> passengers;
-    private long planeId;
     private String planeModel;
     private String departureAirport;
     private String arrivalAirport;

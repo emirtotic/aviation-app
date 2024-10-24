@@ -1,6 +1,7 @@
 package com.flight.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.flight.entity.Passenger;
 import lombok.*;
 
 import java.util.Date;
@@ -12,8 +13,10 @@ import java.util.Date;
 @Builder
 public class FlightRequest {
 
+    private Passenger passenger;
     private String flightCode;
     private long planeId;
+    private long companyId;
     private String departureAirport;
     private String arrivalAirport;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -24,10 +27,5 @@ public class FlightRequest {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date arrivalTime;
-
-    /*
-    U response kreiraj Plane response sa informacijama o avionu
-    U response kreiraj Dva polja tipa Airport response sa informacijama o tome
-     */
 
 }

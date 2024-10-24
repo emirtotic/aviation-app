@@ -2,8 +2,10 @@ package com.flight.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flight.dto.CompanyDetails;
 import com.flight.dto.FlightDto;
 import com.flight.dto.FlightRequest;
+import com.flight.entity.Passenger;
 import com.flight.entity.TopicResponse;
 import com.flight.kafka.*;
 import com.flight.mapper.FlightMapper;
@@ -41,9 +43,12 @@ public class FlightServiceImpl implements FlightService {
 
     private final String AIRPORT_TOPIC = "airport-response";
     private final String PLANE_TOPIC = "plane-response";
+    private final String COMPANY_TOPIC = "company-response";
     private static final int EARTH_RADIUS = 6371;
+
     private CompletableFuture<TopicResponse> airportResponseFuture;
     private CompletableFuture<TopicResponse> planeResponseFuture;
+    private CompletableFuture<TopicResponse> companyResponseFuture;
 
 
     @Override
@@ -52,27 +57,31 @@ public class FlightServiceImpl implements FlightService {
 
         airportResponseFuture = new CompletableFuture<>();
         planeResponseFuture = new CompletableFuture<>();
+        companyResponseFuture = new CompletableFuture<>();
 
         flightKafkaProducer.sendFlightDetails(topic, flightRequest);
 
         TopicResponse airportString = airportResponseFuture.join(); // Join will wait for the response
         TopicResponse planeString = planeResponseFuture.join();
+        TopicResponse companyString = companyResponseFuture.join();
 
 //        TopicResponse airportString = topicService.findByFlightCodeAndTopic(flightRequest.getFlightCode(), AIRPORT_TOPIC);
 //        TopicResponse planeString = topicService.findByFlightCodeAndTopic(flightRequest.getFlightCode(), PLANE_TOPIC);
 
         AirportApiResponse airportResponse;
         PlaneResponse planeResponse;
+        CompanyResponse companyResponse;
         try {
             airportResponse = objectMapper.readValue(airportString.getResponse(), AirportApiResponse.class);
             planeResponse = objectMapper.readValue(planeString.getResponse(), PlaneResponse.class);
+            companyResponse = objectMapper.readValue(companyString.getResponse(), CompanyResponse.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
         if (airportResponse != null && planeResponse != null) {
 
-            FlightDto flightDto = createFlightResponseAssembler(planeResponse, airportResponse);
+            FlightDto flightDto = createFlightResponseAssembler(planeResponse, airportResponse, companyResponse, flightRequest);
             flightRepository.save(flightMapper.mapToEntity(flightDto));
 
             return flightDto;
@@ -118,6 +127,26 @@ public class FlightServiceImpl implements FlightService {
 
             topicRepository.save(planeTopicResponse);
             planeResponseFuture.complete(planeTopicResponse);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @KafkaListener(topics = COMPANY_TOPIC, groupId = "company-service-consumer-group")
+    public void listenCompanyResponse(String response) {
+        System.out.println("Received company response: " + response);
+
+        try {
+            CompanyResponse companyResponse = objectMapper.readValue(response, CompanyResponse.class);
+
+            TopicResponse companyTopicResponse = new TopicResponse();
+            companyTopicResponse.setFlightCode(companyResponse.getFlightCode());
+            companyTopicResponse.setTopic(COMPANY_TOPIC);
+            companyTopicResponse.setResponse(response);
+
+            topicRepository.save(companyTopicResponse);
+            companyResponseFuture.complete(companyTopicResponse);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -172,7 +201,10 @@ public class FlightServiceImpl implements FlightService {
                         Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
     }
 
-    private FlightDto createFlightResponseAssembler(PlaneResponse planeResponse, AirportApiResponse airportResponse) {
+    private FlightDto createFlightResponseAssembler(PlaneResponse planeResponse,
+                                                    AirportApiResponse airportResponse,
+                                                    CompanyResponse companyResponse,
+                                                    FlightRequest flightRequest) {
 
         FlightDto flightDto = new FlightDto();
 
@@ -184,7 +216,22 @@ public class FlightServiceImpl implements FlightService {
         flightDto.setCreatedAt(new Date());
         flightDto.setDepartureTime(new Date());
         flightDto.setArrivalTime(new Date());
-        flightDto.setCompany("KLM");
+
+        CompanyDetails companyDetails = CompanyDetails.builder()
+                .name(companyResponse.getName())
+                .yearFounded(companyResponse.getYearFounded())
+                .country(companyResponse.getCountry())
+                .iataCode(companyResponse.getIataCode())
+                .icaoCode(companyResponse.getIcaoCode())
+                .fleetSize(companyResponse.getFleetSize())
+                .headquarters(companyResponse.getHeadquarters())
+                .destinations(companyResponse.getDestinations())
+                .numberOfEmployees(companyResponse.getNumberOfEmployees())
+                .website(companyResponse.getWebsite())
+                .contactInfo(companyResponse.getContactInfo())
+                .build();
+
+        flightDto.setCompany(companyDetails);
         flightDto.setAveragePlaneSpeed(averagePlaneSpeed);
 
         flightDto.setFlightDistance(calculateDistanceBetweenAirportsInKm(
@@ -194,9 +241,15 @@ public class FlightServiceImpl implements FlightService {
         flightDto.setFlightDuration(calculateFlightDuration(
                 airportResponse.getDepartureAirport(),
                 airportResponse.getArrivalAirport(),
-                averagePlaneSpeed) );
+                averagePlaneSpeed));
 
-        flightDto.setPassengers(new ArrayList<>());
+        flightDto.setPassenger(Passenger.builder()
+                .firstName(flightRequest.getPassenger().getFirstName())
+                .lastName(flightRequest.getPassenger().getLastName())
+                .title(flightRequest.getPassenger().getTitle())
+                .gender(flightRequest.getPassenger().getGender())
+                .age(flightRequest.getPassenger().getAge())
+                .build());
 
         return flightDto;
     }
