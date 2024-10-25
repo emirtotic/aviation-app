@@ -1,18 +1,19 @@
 package com.flight.dto;
 
 import com.flight.entity.Passenger;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class FlightDto {
 
-    private Passenger passenger;
+    private PassengerDTO passenger;
     private String planeModel;
     private int averagePlaneSpeed;
     private String departureAirport;
@@ -24,11 +25,11 @@ public class FlightDto {
     private BigDecimal flightDistance;
     private BigDecimal flightDuration;
 
-    public Passenger getPassenger() {
+    public PassengerDTO getPassenger() {
         return passenger;
     }
 
-    public void setPassenger(Passenger passenger) {
+    public void setPassenger(PassengerDTO passenger) {
         this.passenger = passenger;
     }
 
