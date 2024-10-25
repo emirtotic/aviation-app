@@ -9,6 +9,7 @@ import com.flight.entity.Passenger;
 import com.flight.entity.TopicResponse;
 import com.flight.kafka.*;
 import com.flight.mapper.FlightMapper;
+import com.flight.mapper.PassengerMapper;
 import com.flight.reposirory.FlightRepository;
 import com.flight.reposirory.TopicRepository;
 import com.flight.service.FlightService;
@@ -22,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
@@ -40,6 +43,7 @@ public class FlightServiceImpl implements FlightService {
     private final ObjectMapper objectMapper;
     private final TopicService topicService;
     private final FlightMapper flightMapper;
+    private final PassengerMapper passengerMapper;
 
     private final String AIRPORT_TOPIC = "airport-response";
     private final String PLANE_TOPIC = "plane-response";
@@ -191,7 +195,9 @@ public class FlightServiceImpl implements FlightService {
 
         double flightDurationHours = Double.valueOf(distance.doubleValue()) / averagePlaneSpeed;
 
-        return BigDecimal.valueOf(flightDurationHours).setScale(2, RoundingMode.HALF_UP);
+        double durationInMinutes = flightDurationHours * 60;
+
+        return BigDecimal.valueOf(durationInMinutes).setScale(2, RoundingMode.HALF_UP);
     }
 
     private double haversineFormula(double deltaLat, double deltaLon, Airport airport1, Airport airport2) {
@@ -215,7 +221,7 @@ public class FlightServiceImpl implements FlightService {
         flightDto.setArrivalAirport(airportResponse.getArrivalAirport().getName());
         flightDto.setCreatedAt(new Date());
         flightDto.setDepartureTime(new Date());
-        flightDto.setArrivalTime(new Date());
+        //flightDto.setArrivalTime(new Date());
 
         CompanyDetails companyDetails = CompanyDetails.builder()
                 .name(companyResponse.getName())
@@ -243,14 +249,33 @@ public class FlightServiceImpl implements FlightService {
                 airportResponse.getArrivalAirport(),
                 averagePlaneSpeed));
 
-        flightDto.setPassenger(Passenger.builder()
-                .firstName(flightRequest.getPassenger().getFirstName())
-                .lastName(flightRequest.getPassenger().getLastName())
-                .title(flightRequest.getPassenger().getTitle())
-                .gender(flightRequest.getPassenger().getGender())
-                .age(flightRequest.getPassenger().getAge())
-                .build());
+        flightDto.setPassenger(
+                passengerMapper.mapToDTO(
+                        Passenger.builder()
+                                .firstName(flightRequest.getPassenger().getFirstName())
+                                .lastName(flightRequest.getPassenger().getLastName())
+                                .title(flightRequest.getPassenger().getTitle())
+                                .gender(flightRequest.getPassenger().getGender())
+                                .age(flightRequest.getPassenger().getAge())
+                                .build()));
+
+
+        flightDto.setArrivalTime(calculateArrivalTime(flightDto.getDepartureTime(), flightDto.getFlightDuration()));
+
 
         return flightDto;
     }
+
+    private Date calculateArrivalTime(Date departure, BigDecimal flightDuration) {
+
+        LocalDateTime departureTime = Instant.ofEpochMilli(departure.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        long minutesToAdd = flightDuration.longValue();
+        LocalDateTime arrivalTime = departureTime.plusSeconds(minutesToAdd);
+
+        return Date.from(arrivalTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
 }
