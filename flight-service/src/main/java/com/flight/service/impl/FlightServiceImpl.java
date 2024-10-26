@@ -26,6 +26,7 @@ import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
@@ -220,8 +221,7 @@ public class FlightServiceImpl implements FlightService {
         flightDto.setDepartureAirport(airportResponse.getDepartureAirport().getName());
         flightDto.setArrivalAirport(airportResponse.getArrivalAirport().getName());
         flightDto.setCreatedAt(new Date());
-        flightDto.setDepartureTime(new Date());
-        //flightDto.setArrivalTime(new Date());
+        flightDto.setDepartureTime(flightRequest.getDepartureTime());
 
         CompanyDetails companyDetails = CompanyDetails.builder()
                 .name(companyResponse.getName())
@@ -262,20 +262,18 @@ public class FlightServiceImpl implements FlightService {
 
         flightDto.setArrivalTime(calculateArrivalTime(flightDto.getDepartureTime(), flightDto.getFlightDuration()));
 
-
         return flightDto;
     }
 
-    private Date calculateArrivalTime(Date departure, BigDecimal flightDuration) {
+    private Date calculateArrivalTime(Date departure, BigDecimal flightDurationInMinutes) {
 
-        LocalDateTime departureTime = Instant.ofEpochMilli(departure.getTime())
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+        int minutesToAdd = flightDurationInMinutes.intValue();
 
-        long minutesToAdd = flightDuration.longValue();
-        LocalDateTime arrivalTime = departureTime.plusSeconds(minutesToAdd);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(departure);
+        calendar.add(Calendar.MINUTE, minutesToAdd);
 
-        return Date.from(arrivalTime.atZone(ZoneId.systemDefault()).toInstant());
+        return calendar.getTime();
     }
 
 }
