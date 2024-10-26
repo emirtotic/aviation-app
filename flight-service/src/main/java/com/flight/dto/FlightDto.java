@@ -1,6 +1,6 @@
 package com.flight.dto;
 
-import com.flight.entity.Passenger;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -18,12 +18,15 @@ public class FlightDto {
     private int averagePlaneSpeed;
     private String departureAirport;
     private String arrivalAirport;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date departureTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date arrivalTime;
     private CompanyDetails company;
-    private BigDecimal flightDistance;
-    private BigDecimal flightDuration;
+    private BigDecimal flightDistanceKm;
+    private BigDecimal flightDurationInMinutes;
 
     public PassengerDTO getPassenger() {
         return passenger;
@@ -97,19 +100,19 @@ public class FlightDto {
         this.company = company;
     }
 
-    public BigDecimal getFlightDistance() {
-        return flightDistance;
+    public BigDecimal getFlightDistanceKm() {
+        return flightDistanceKm;
     }
 
-    public void setFlightDistance(BigDecimal flightDistance) {
-        this.flightDistance = flightDistance;
+    public void setFlightDistanceKm(BigDecimal flightDistanceKm) {
+        this.flightDistanceKm = flightDistanceKm;
     }
 
-    public BigDecimal getFlightDuration() {
-        return flightDuration;
+    public BigDecimal getFlightDurationInMinutes() {
+        return flightDurationInMinutes;
     }
 
-    public void setFlightDuration(BigDecimal flightDuration) {
-        this.flightDuration = flightDuration;
+    public void setFlightDurationInMinutes(BigDecimal flightDurationInMinutes) {
+        this.flightDurationInMinutes = flightDurationInMinutes;
     }
 }

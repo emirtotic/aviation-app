@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS flights.flight
     plane_id          BIGINT       NOT NULL,
     departure_airport VARCHAR(3)   NOT NULL,
     arrival_airport   VARCHAR(3)   NOT NULL,
-    created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    departure_time    TIMESTAMP    NOT NULL,
-    arrival_time      TIMESTAMP    NOT NULL,
+    created_at        DATE DEFAULT CURRENT_TIMESTAMP,
+    departure_time    DATE         NOT NULL,
+    arrival_time      DATE         NOT NULL,
     company           VARCHAR(255) NOT NULL
 );
 

@@ -240,11 +240,11 @@ public class FlightServiceImpl implements FlightService {
         flightDto.setCompany(companyDetails);
         flightDto.setAveragePlaneSpeed(averagePlaneSpeed);
 
-        flightDto.setFlightDistance(calculateDistanceBetweenAirportsInKm(
+        flightDto.setFlightDistanceKm(calculateDistanceBetweenAirportsInKm(
                 airportResponse.getDepartureAirport(),
                 airportResponse.getArrivalAirport()));
 
-        flightDto.setFlightDuration(calculateFlightDuration(
+        flightDto.setFlightDurationInMinutes(calculateFlightDuration(
                 airportResponse.getDepartureAirport(),
                 airportResponse.getArrivalAirport(),
                 averagePlaneSpeed));
@@ -260,7 +260,7 @@ public class FlightServiceImpl implements FlightService {
                                 .build()));
 
 
-        flightDto.setArrivalTime(calculateArrivalTime(flightDto.getDepartureTime(), flightDto.getFlightDuration()));
+        flightDto.setArrivalTime(calculateArrivalTime(flightDto.getDepartureTime(), flightDto.getFlightDurationInMinutes()));
 
         return flightDto;
     }
@@ -275,5 +275,4 @@ public class FlightServiceImpl implements FlightService {
 
         return calendar.getTime();
     }
-
 }
