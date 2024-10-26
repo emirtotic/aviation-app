@@ -1,6 +1,8 @@
 package com.company.service.impl;
 
 import com.company.dto.CompanyDTO;
+import com.company.entity.Company;
+import com.company.exception.CompanyNotFoundException;
 import com.company.mapper.CompanyMapper;
 import com.company.repository.CompanyRepository;
 import com.company.service.CompanyService;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,12 +33,20 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDTO findCompanyByIata(String iata) {
-        return companyMapper.mapToDTO(companyRepository.findCompanyByIataCode(iata));
+
+        Company companyByIataCode = Optional.ofNullable(companyRepository.findCompanyByIataCode(iata))
+                .orElseThrow(() -> new CompanyNotFoundException(iata));
+
+        return companyMapper.mapToDTO(companyByIataCode);
     }
 
     @Override
     public CompanyDTO findCompanyByName(String name) {
-        return companyMapper.mapToDTO(companyRepository.findCompanyByName(name));
+
+        Company companyByName = Optional.ofNullable(companyRepository.findCompanyByName(name))
+                .orElseThrow(() -> new CompanyNotFoundException(name));
+
+        return companyMapper.mapToDTO(companyByName);
     }
 
     @Override

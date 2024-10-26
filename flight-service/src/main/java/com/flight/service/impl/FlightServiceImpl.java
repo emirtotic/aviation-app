@@ -23,9 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
@@ -70,9 +67,6 @@ public class FlightServiceImpl implements FlightService {
         TopicResponse planeString = planeResponseFuture.join();
         TopicResponse companyString = companyResponseFuture.join();
 
-//        TopicResponse airportString = topicService.findByFlightCodeAndTopic(flightRequest.getFlightCode(), AIRPORT_TOPIC);
-//        TopicResponse planeString = topicService.findByFlightCodeAndTopic(flightRequest.getFlightCode(), PLANE_TOPIC);
-
         AirportApiResponse airportResponse;
         PlaneResponse planeResponse;
         CompanyResponse companyResponse;
@@ -99,11 +93,10 @@ public class FlightServiceImpl implements FlightService {
     @KafkaListener(topics = AIRPORT_TOPIC, groupId = "airport-service-consumer-group")
     public void listenAirportResponse(String response) {
 
-        System.out.println("Received airport response: " + response);
+        log.info("Received airport response: {}", response);
 
         try {
             AirportResponse airportResponse = objectMapper.readValue(response, AirportResponse.class);
-            System.out.println("");
 
             TopicResponse airportTopicResponse = new TopicResponse();
             airportTopicResponse.setFlightCode(airportResponse.getFlightCode());
@@ -120,7 +113,8 @@ public class FlightServiceImpl implements FlightService {
 
     @KafkaListener(topics = PLANE_TOPIC, groupId = "plane-service-consumer-group")
     public void listenPlaneResponse(String response) {
-        System.out.println("Received plane response: " + response);
+
+        log.info("Received plane response: {}", response);
 
         try {
             PlaneResponse planeResponse = objectMapper.readValue(response, PlaneResponse.class);
@@ -140,7 +134,8 @@ public class FlightServiceImpl implements FlightService {
 
     @KafkaListener(topics = COMPANY_TOPIC, groupId = "company-service-consumer-group")
     public void listenCompanyResponse(String response) {
-        System.out.println("Received company response: " + response);
+
+        log.info("Received company response: {}", response);
 
         try {
             CompanyResponse companyResponse = objectMapper.readValue(response, CompanyResponse.class);
