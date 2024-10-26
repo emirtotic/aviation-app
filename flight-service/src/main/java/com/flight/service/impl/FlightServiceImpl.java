@@ -221,7 +221,12 @@ public class FlightServiceImpl implements FlightService {
         flightDto.setDepartureAirport(airportResponse.getDepartureAirport().getName());
         flightDto.setArrivalAirport(airportResponse.getArrivalAirport().getName());
         flightDto.setCreatedAt(new Date());
-        flightDto.setDepartureTime(flightRequest.getDepartureTime());
+
+        if (!flightRequest.getDepartureTime().before(flightDto.getCreatedAt())) {
+            flightDto.setDepartureTime(flightRequest.getDepartureTime());
+        } else {
+            throw new IllegalArgumentException("Departure time must be in the future!");
+        }
 
         CompanyDetails companyDetails = CompanyDetails.builder()
                 .name(companyResponse.getName())
