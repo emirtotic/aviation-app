@@ -69,8 +69,15 @@ public class ReportServiceImpl implements ReportService {
             throw new RuntimeException("Error parsing FlightReport", e);
         }
 
-        // Generiši i sačuvaj PDF fajl
-        savePdfReport(flightReport, "flightReport_" + flightReport.getPassenger().getLastName() + ".pdf");
+        StringBuilder fileName = new StringBuilder();
+        fileName.append("FlightReport - ")
+                        .append(flightReport.getPassenger().getTitle()).append(" ")
+                        .append(flightReport.getPassenger().getFirstName()).append(" ")
+                        .append(flightReport.getPassenger().getLastName()).append(" ")
+                        .append(".pdf");
+
+
+        savePdfReport(flightReport, fileName.toString());
         return flightReport;
     }
 
@@ -78,7 +85,6 @@ public class ReportServiceImpl implements ReportService {
     public void savePdfReport(FlightReport flightReport, String fileName) {
         byte[] pdfData = createPdfReport(flightReport);
 
-        // Koristite hardkodovanu putanju do direktorijuma gde se nalazi template
         Path filePath = Paths.get(REPORT_DIRECTORY, fileName);
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(filePath.toFile())) {
