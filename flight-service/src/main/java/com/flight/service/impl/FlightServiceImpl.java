@@ -5,13 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flight.dto.CompanyDetails;
 import com.flight.dto.FlightDto;
 import com.flight.dto.FlightRequest;
+import com.flight.entity.FlightResponseForReport;
 import com.flight.entity.Passenger;
 import com.flight.entity.TopicResponse;
+import com.flight.exception.FlightProcessingException;
 import com.flight.kafka.*;
 import com.flight.mapper.FlightMapper;
 import com.flight.mapper.PassengerMapper;
 import com.flight.reposirory.FlightRepository;
 import com.flight.reposirory.TopicRepository;
+import com.flight.service.FlightResponseForReportService;
 import com.flight.service.FlightService;
 import com.flight.service.TopicService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +37,9 @@ public class FlightServiceImpl implements FlightService {
 
     private final TopicRepository topicRepository;
     @Value("${spring.kafka.topics.flight-requests}")
-    private String topic;
+    private String flightTopic;
+    @Value("${spring.kafka.topics.report-requests}")
+    private String reportTopic;
 
     private final FlightRepository flightRepository;
     private final FlightKafkaProducer flightKafkaProducer;
@@ -42,6 +47,7 @@ public class FlightServiceImpl implements FlightService {
     private final TopicService topicService;
     private final FlightMapper flightMapper;
     private final PassengerMapper passengerMapper;
+    private final FlightResponseForReportService flightResponseForReportService;
 
     private final String AIRPORT_TOPIC = "airport-response";
     private final String PLANE_TOPIC = "plane-response";
@@ -61,7 +67,7 @@ public class FlightServiceImpl implements FlightService {
         planeResponseFuture = new CompletableFuture<>();
         companyResponseFuture = new CompletableFuture<>();
 
-        flightKafkaProducer.sendFlightDetails(topic, flightRequest);
+        flightKafkaProducer.sendFlightDetails(flightTopic, flightRequest);
 
         TopicResponse airportString = airportResponseFuture.join(); // Join will wait for the response
         TopicResponse planeString = planeResponseFuture.join();
@@ -83,10 +89,17 @@ public class FlightServiceImpl implements FlightService {
             FlightDto flightDto = createFlightResponseAssembler(planeResponse, airportResponse, companyResponse, flightRequest);
             flightRepository.save(flightMapper.mapToEntity(flightDto));
 
+            FlightResponseForReport flightForReport = makeFlightReportObjectFromDto(flightDto, flightRequest);
+            flightResponseForReportService.saveFlightResponseForReport(flightForReport);
+
+            FlightResponseForReport reportDetails = flightResponseForReportService.findById(flightForReport.getId());
+
+            flightKafkaProducer.sendReportDetails(reportTopic, reportDetails);
+
             return flightDto;
         }
 
-        throw new RuntimeException();
+        throw new FlightProcessingException("Required responses from airport and plane are missing!");
 
     }
 
@@ -274,5 +287,16 @@ public class FlightServiceImpl implements FlightService {
         calendar.add(Calendar.MINUTE, minutesToAdd);
 
         return calendar.getTime();
+    }
+
+    private FlightResponseForReport makeFlightReportObjectFromDto(FlightDto flightDto, FlightRequest flightRequest) {
+        FlightResponseForReport ffr = new FlightResponseForReport();
+        try {
+            ffr.setResponse(objectMapper.writeValueAsString(flightDto));
+            ffr.setFlightCode(flightRequest.getFlightCode());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return ffr;
     }
 }

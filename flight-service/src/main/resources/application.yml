@@ -26,6 +26,7 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     topics:
       flight-requests: flight-requests
+      report-requests: report-requests
       airport-response: airport-response
       plane-response: plane-response
       company-response: company-response

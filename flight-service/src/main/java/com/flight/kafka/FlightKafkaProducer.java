@@ -3,6 +3,7 @@ package com.flight.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flight.dto.FlightRequest;
+import com.flight.entity.FlightResponseForReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,15 @@ public class FlightKafkaProducer {
         try {
             String flightRequestJson = objectMapper.writeValueAsString(flightRequest);
             kafkaTemplate.send(topic, flightRequestJson);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendReportDetails(String topic, FlightResponseForReport flightResponseForReport) {
+        try {
+            String reportDetails = objectMapper.writeValueAsString(flightResponseForReport);
+            kafkaTemplate.send(topic, reportDetails);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

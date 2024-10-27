@@ -2,6 +2,7 @@ package com.flight.mapper;
 
 import com.flight.dto.FlightDto;
 import com.flight.entity.Flight;
+import com.flight.entity.FlightResponseForReport;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -19,5 +20,7 @@ public interface FlightMapper {
     FlightDto mapToDTO(Flight flight);
 
     List<FlightDto> mapToDTO(List<Flight> flights);
+
+    FlightResponseForReport mapForReport(FlightDto flightDto);
 
 }
