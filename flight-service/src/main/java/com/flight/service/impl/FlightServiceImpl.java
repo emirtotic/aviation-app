@@ -227,7 +227,11 @@ public class FlightServiceImpl implements FlightService {
 
         flightDto.setPlaneModel(planeResponse.getPlaneModel());
         flightDto.setDepartureAirport(airportResponse.getDepartureAirport().getName());
+        flightDto.setDepartureAirportIata(airportResponse.getDepartureAirport().getIata());
+        flightDto.setDepartureAirportCountry(airportResponse.getDepartureAirport().getCountry());
         flightDto.setArrivalAirport(airportResponse.getArrivalAirport().getName());
+        flightDto.setArrivalAirportIata(airportResponse.getArrivalAirport().getIata());
+        flightDto.setArrivalAirportCountry(airportResponse.getArrivalAirport().getCountry());
         flightDto.setCreatedAt(new Date());
 
         if (!flightRequest.getDepartureTime().before(flightDto.getCreatedAt())) {
