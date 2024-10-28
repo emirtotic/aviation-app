@@ -21,7 +21,8 @@ public class AirportKafkaConsumer {
     public void listen(String flightRequestJson) {
         try {
             FlightApiRequest flightApiRequest = objectMapper.readValue(flightRequestJson, FlightApiRequest.class);
-            System.out.println("Received flight request for airport: " + flightApiRequest.getDepartureAirport());
+
+            log.info("Received flight request for airport: {}", flightRequestJson);
 
             AirportDTO departure = airportService.findAirportByIata(flightApiRequest.getDepartureAirport());
             AirportDTO arrival = airportService.findAirportByIata(flightApiRequest.getArrivalAirport());

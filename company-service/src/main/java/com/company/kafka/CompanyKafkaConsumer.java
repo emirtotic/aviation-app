@@ -43,7 +43,7 @@ public class CompanyKafkaConsumer {
                     .contactInfo(companyDTO.getContactInfo())
                     .build();
 
-            System.out.println("COMPANY = POZVANO");
+            log.info("Company consumer received a request: {}", flightRequestJson);
 
             kafkaTemplate.send("company-response", objectMapper.writeValueAsString(flightApiResponse));
             log.info("Sent to Flight service " + objectMapper.writeValueAsString(flightApiResponse));
