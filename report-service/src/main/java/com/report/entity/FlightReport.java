@@ -13,7 +13,11 @@ public class FlightReport {
     private String planeModel;
     private int averagePlaneSpeed;
     private String departureAirport;
+    private String departureAirportIata;
+    private String departureAirportCountry;
     private String arrivalAirport;
+    private String arrivalAirportIata;
+    private String arrivalAirportCountry;
     private String createdAt;
     private String departureTime;
     private String arrivalTime;
