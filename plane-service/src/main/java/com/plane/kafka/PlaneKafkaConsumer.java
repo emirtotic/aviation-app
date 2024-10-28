@@ -38,7 +38,7 @@ public class PlaneKafkaConsumer {
                     .averageSpeed(planeDTO.getAverageSpeed())
                     .build();
 
-            System.out.println("PLANE = POZVANO");
+            log.info("Plane consumer received a request: {}", flightRequestJson);
 
             kafkaTemplate.send("plane-response", objectMapper.writeValueAsString(flightApiResponse));
             log.info("Sent to Flight service " + objectMapper.writeValueAsString(flightApiResponse));

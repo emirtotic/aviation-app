@@ -31,4 +31,14 @@ public class PlaneDTO {
     @Min(value = 250, message = "Wrong average speed value")
     private int averageSpeed;
 
+    @Override
+    public String toString() {
+        return "PlaneDTO{" +
+                "model='" + model + '\'' +
+                ", capacity=" + capacity +
+                ", type=" + type +
+                ", description='" + description + '\'' +
+                ", averageSpeed=" + averageSpeed +
+                '}';
+    }
 }

@@ -17,7 +17,11 @@ public class FlightDto {
     private String planeModel;
     private int averagePlaneSpeed;
     private String departureAirport;
+    private String departureAirportIata;
+    private String departureAirportCountry;
     private String arrivalAirport;
+    private String arrivalAirportIata;
+    private String arrivalAirportCountry;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -27,6 +31,7 @@ public class FlightDto {
     private CompanyDetails company;
     private BigDecimal flightDistanceKm;
     private BigDecimal flightDurationInMinutes;
+
 
     public PassengerDTO getPassenger() {
         return passenger;
@@ -60,12 +65,44 @@ public class FlightDto {
         this.departureAirport = departureAirport;
     }
 
+    public String getDepartureAirportIata() {
+        return departureAirportIata;
+    }
+
+    public void setDepartureAirportIata(String departureAirportIata) {
+        this.departureAirportIata = departureAirportIata;
+    }
+
+    public String getDepartureAirportCountry() {
+        return departureAirportCountry;
+    }
+
+    public void setDepartureAirportCountry(String departureAirportCountry) {
+        this.departureAirportCountry = departureAirportCountry;
+    }
+
     public String getArrivalAirport() {
         return arrivalAirport;
     }
 
     public void setArrivalAirport(String arrivalAirport) {
         this.arrivalAirport = arrivalAirport;
+    }
+
+    public String getArrivalAirportIata() {
+        return arrivalAirportIata;
+    }
+
+    public void setArrivalAirportIata(String arrivalAirportIata) {
+        this.arrivalAirportIata = arrivalAirportIata;
+    }
+
+    public String getArrivalAirportCountry() {
+        return arrivalAirportCountry;
+    }
+
+    public void setArrivalAirportCountry(String arrivalAirportCountry) {
+        this.arrivalAirportCountry = arrivalAirportCountry;
     }
 
     public Date getCreatedAt() {
