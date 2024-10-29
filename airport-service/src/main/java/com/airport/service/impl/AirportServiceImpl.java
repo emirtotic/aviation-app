@@ -80,7 +80,10 @@ public class AirportServiceImpl implements AirportService {
 
     @Override
     public AirportDTO findAirportByIata(String iata) {
-        return airportMapper.mapToDTO(airportRepository.findByIata(iata.toUpperCase()));
+
+        Airport airport = Optional.ofNullable(airportRepository.findByIata(iata.toUpperCase()))
+                .orElseThrow(() -> new AirportNotFoundException(iata));
+        return airportMapper.mapToDTO(airport);
     }
 
     @Override
