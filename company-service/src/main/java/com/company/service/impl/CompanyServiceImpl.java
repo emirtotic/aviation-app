@@ -51,6 +51,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDTO findCompanyById(Long id) {
-        return companyMapper.mapToDTO(companyRepository.findById(id).orElseThrow()); // TODO: custom exception
+        return companyMapper.mapToDTO(companyRepository.findById(id).orElseThrow(() -> new CompanyNotFoundException(id))); // TODO: custom exception
     }
 }
