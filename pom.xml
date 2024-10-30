@@ -19,6 +19,7 @@
         <module>eureka-server</module>
         <module>company-service</module>
         <module>report-service</module>
+        <module>api-gateway</module>
     </modules>
 
     <dependencyManagement>
@@ -34,6 +35,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>1.18.34</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>4.0.1</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>

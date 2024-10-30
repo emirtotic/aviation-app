@@ -1,0 +1,47 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 5000
+      retry:
+        retries: 3
+        delay: 2s
+      routes:
+        - id: flight-service
+          uri: lb://FLIGHT-SERVICE
+          predicates:
+            - Path=/api/flight/**
+        - id: airport-service
+          uri: lb://AIRPORT-SERVICE
+          predicates:
+            - Path=/api/airport/**
+        - id: airport-service-countries
+          uri: lb://AIRPORT-SERVICE
+          predicates:
+            - Path=/api/country/**
+        - id: company-service
+          uri: lb://COMPANY-SERVICE
+          predicates:
+            - Path=/api/company/**
+        - id: plane-service
+          uri: lb://PLANE-SERVICE
+          predicates:
+            - Path=/api/planes/**
+        - id: report-service
+          uri: lb://REPORT-SERVICE
+          predicates:
+            - Path=/api/report/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

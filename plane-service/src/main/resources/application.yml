@@ -19,7 +19,7 @@ spring:
       spec: maximumSize=100, expireAfterAccess=5m
 
   application:
-    name: "Plane Service"
+    name: "plane-service"
     version: "1.0"
 
   springdoc:
@@ -36,17 +36,14 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-
 logging:
   level:
     org.springframework.cache: TRACE
 
-
-
-  #eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
 
 

@@ -6,7 +6,7 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/airport
   application:
-    name: "Airport Service"
+    name: "airport-service"
     version: "1.0"
   kafka:
     bootstrap-servers: localhost:9092
@@ -23,7 +23,7 @@ rapidAirportApiUrl: "https://airports-runways-and-airlines-worldwide-api.p.rapid
 x-rapidapi-key: "ea08dd8f6cmsh57c2abcad6981b1p1eefb5jsn2534752b6054"
 x-airport-rapidapi-host: "airports-runways-and-airlines-worldwide-api.p.rapidapi.com"
 
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

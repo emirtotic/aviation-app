@@ -13,7 +13,7 @@ spring:
   flyway:
     enabled: true
   application:
-    name: "Flight Service"
+    name: "flight-service"
     version: "1.0"
   kafka:
     bootstrap-servers: localhost:9092
@@ -31,8 +31,18 @@ spring:
       plane-response: plane-response
       company-response: company-response
 
-#
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    registry-fetch-interval-seconds: 5
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
