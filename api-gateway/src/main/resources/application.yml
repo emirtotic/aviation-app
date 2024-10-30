@@ -20,28 +20,70 @@ spring:
           uri: lb://FLIGHT-SERVICE
           predicates:
             - Path=/api/flight/**
+          filters:
+            - Retry=3
+            - AddRequestHeader=X-Request-Source, Gateway
         - id: airport-service
           uri: lb://AIRPORT-SERVICE
           predicates:
             - Path=/api/airport/**
+          filters:
+            - Retry=3
+            - AddRequestHeader=X-Request-Source, Gateway
         - id: airport-service-countries
           uri: lb://AIRPORT-SERVICE
           predicates:
             - Path=/api/country/**
+          filters:
+            - Retry=3
+            - AddRequestHeader=X-Request-Source, Gateway
         - id: company-service
           uri: lb://COMPANY-SERVICE
           predicates:
             - Path=/api/company/**
+          filters:
+            - Retry=3
+            - AddRequestHeader=X-Request-Source, Gateway
         - id: plane-service
           uri: lb://PLANE-SERVICE
           predicates:
             - Path=/api/planes/**
+          filters:
+            - Retry=3
+            - AddRequestHeader=X-Request-Source, Gateway
         - id: report-service
           uri: lb://REPORT-SERVICE
           predicates:
             - Path=/api/report/**
+          filters:
+            - Retry=3
+            - AddRequestHeader=X-Request-Source, Gateway
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            series: SERVER_ERROR
+            statuses:
+              - SERVICE_UNAVAILABLE
+            backoff:
+              firstBackoff: 2s
+              maxBackoff: 10s
+              factor: 2
+              jitter: true
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+    registry-fetch-interval-seconds: 3
+  instance:
+    status-page-url-path: /actuator/health
+    health-check-url-path: /actuator/health
+    lease-renewal-interval-in-seconds: 3
+    lease-expiration-duration-in-seconds: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
