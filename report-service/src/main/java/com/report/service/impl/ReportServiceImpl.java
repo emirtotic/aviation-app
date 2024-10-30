@@ -30,9 +30,7 @@ public class ReportServiceImpl implements ReportService {
     private final ObjectMapper objectMapper;
     private static final String REPORT_DIRECTORY = "/Users/emirtotic/Documents/projects/aviation-app/report-service/src/main/resources/flight-reports";
 
-
     private final String REPORT_TOPIC = "report-requests";
-
 
     @Override
     public byte[] createPdfReport(FlightReport flightReport) {
@@ -71,7 +69,7 @@ public class ReportServiceImpl implements ReportService {
         fileName.append("FlightReport - ")
                         .append(flightReport.getPassenger().getTitle()).append(" ")
                         .append(flightReport.getPassenger().getFirstName()).append(" ")
-                        .append(flightReport.getPassenger().getLastName()).append(" ")
+                        .append(flightReport.getPassenger().getLastName())
                         .append(".pdf");
 
 

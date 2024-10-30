@@ -1,12 +1,9 @@
 package com.flight.service.impl;
 
 import com.flight.entity.FlightResponseForReport;
-import com.flight.entity.TopicResponse;
 import com.flight.exception.FlightForReportNotFoundException;
 import com.flight.reposirory.FlightResponseForReportRepository;
-import com.flight.reposirory.TopicRepository;
 import com.flight.service.FlightResponseForReportService;
-import com.flight.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
