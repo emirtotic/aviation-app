@@ -29,7 +29,6 @@ public class AirportController {
         return new ResponseEntity<>(airportDTOS, HttpStatus.OK);
     }
 
-    // TODO: Move to Flight Service
     @PostMapping("/calculate-distance")
     public ResponseEntity<String> calculateDistanceInKm(@RequestParam String iata1, @RequestParam String iata2) {
         BigDecimal distance = airportService.calculateDistanceBetweenAirportsInKm(iata1, iata2);
@@ -47,7 +46,6 @@ public class AirportController {
         return new ResponseEntity<>(sb.toString(), HttpStatus.OK);
     }
 
-    // TODO: Move to Flight Service
     @PostMapping("/calculate-flight-duration")
     public ResponseEntity<String> calculateFlightDuration(@RequestParam String iata1, @RequestParam String iata2) {
         BigDecimal distance = airportService.calculateFlightDuration(iata1, iata2);
