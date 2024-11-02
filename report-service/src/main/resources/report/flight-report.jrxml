@@ -34,6 +34,7 @@
     <field name="company.contactInfo" class="java.lang.String"/>
     <field name="flightDistanceKm" class="java.lang.Double"/>
     <field name="flightDurationInMinutes" class="java.lang.Double"/>
+    <field name="events" class="java.lang.String"/>
     <title>
         <band height="40">
             <textField textAdjust="StretchHeight">
@@ -159,6 +160,16 @@
             <textField textAdjust="StretchHeight">
                 <reportElement style="Normal" x="0" y="430" width="555" height="12" uuid="d457cc4c-6ad7-4d9e-b372-c3b9a0b7168d"/>
                 <textFieldExpression><![CDATA["Contact: " + $F{company.contactInfo}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement style="Subtitle" x="0" y="455" width="555" height="15" uuid="1e6f7a5b-8d2c-4c8d-9a6e-8d5f3c1b9a2e"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA["Facts on this day"]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement style="Normal" x="0" y="480" width="555" height="12" uuid="3a4e8d0f-4c8b-4c3a-8a5e-7f8e4a6d5b9c"/>
+                <textElement textAlignment="Justified"/>
+                <textFieldExpression><![CDATA[$F{events}]]></textFieldExpression>
             </textField>
         </band>
     </detail>
