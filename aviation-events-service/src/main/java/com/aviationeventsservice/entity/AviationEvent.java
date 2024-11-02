@@ -22,4 +22,12 @@ public class AviationEvent {
     @Lob
     private String events;
 
+    @Override
+    public String toString() {
+        return "AviationEvent{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", events='" + events + '\'' +
+                '}';
+    }
 }
