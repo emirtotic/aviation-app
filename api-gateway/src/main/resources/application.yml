@@ -11,7 +11,7 @@ spring:
           enabled: true
       httpclient:
         connect-timeout: 5000
-        response-timeout: 5000
+        response-timeout: 30000
       retry:
         retries: 3
         delay: 2s
@@ -55,6 +55,13 @@ spring:
           uri: lb://REPORT-SERVICE
           predicates:
             - Path=/api/report/**
+          filters:
+            - Retry=3
+            - AddRequestHeader=X-Request-Source, Gateway
+        - id: aviation-event-service
+          uri: lb://AVIATION-EVENT-SERVICE
+          predicates:
+            - Path=/api/aviation-events/**
           filters:
             - Retry=3
             - AddRequestHeader=X-Request-Source, Gateway

@@ -19,8 +19,11 @@ spring:
 #      spec: maximumSize=100, expireAfterAccess=5m
 
   application:
-    name: "aviation-events-service"
+    name: "aviation-event-service"
     version: "1.0"
+
+skytamer:
+  url: "https://www.skytamer.com/"
 
 #  springdoc:
 #    swagger-ui:
@@ -32,7 +35,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      group-id: aviation-events-service-consumer-group
+      group-id: aviation-event-service-consumer-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 

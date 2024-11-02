@@ -30,6 +30,7 @@ spring:
       airport-response: airport-response
       plane-response: plane-response
       company-response: company-response
+      aviation-event-response: aviation-event-response
 
 
 eureka:
