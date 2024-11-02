@@ -52,11 +52,13 @@ public class FlightServiceImpl implements FlightService {
     private final String AIRPORT_TOPIC = "airport-response";
     private final String PLANE_TOPIC = "plane-response";
     private final String COMPANY_TOPIC = "company-response";
+    private final String AVIATION_EVENT_TOPIC = "aviation-event-response";
     private static final int EARTH_RADIUS = 6371;
 
     private CompletableFuture<TopicResponse> airportResponseFuture;
     private CompletableFuture<TopicResponse> planeResponseFuture;
     private CompletableFuture<TopicResponse> companyResponseFuture;
+    private CompletableFuture<TopicResponse> aviationEventResponseFuture;
 
 
     @Override
@@ -66,27 +68,35 @@ public class FlightServiceImpl implements FlightService {
         airportResponseFuture = new CompletableFuture<>();
         planeResponseFuture = new CompletableFuture<>();
         companyResponseFuture = new CompletableFuture<>();
+        aviationEventResponseFuture = new CompletableFuture<>();
 
         flightKafkaProducer.sendFlightDetails(flightTopic, flightRequest);
 
         TopicResponse airportString = airportResponseFuture.join(); // Join will wait for the response
         TopicResponse planeString = planeResponseFuture.join();
         TopicResponse companyString = companyResponseFuture.join();
+        TopicResponse aviationEventString = aviationEventResponseFuture.join();
 
         AirportApiResponse airportResponse;
         PlaneResponse planeResponse;
         CompanyResponse companyResponse;
+        AviationEventResponse aviationEventResponse;
         try {
             airportResponse = objectMapper.readValue(airportString.getResponse(), AirportApiResponse.class);
             planeResponse = objectMapper.readValue(planeString.getResponse(), PlaneResponse.class);
             companyResponse = objectMapper.readValue(companyString.getResponse(), CompanyResponse.class);
+            aviationEventResponse = objectMapper.readValue(aviationEventString.getResponse(), AviationEventResponse.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
         if (airportResponse != null && planeResponse != null) {
 
-            FlightDto flightDto = createFlightResponseAssembler(planeResponse, airportResponse, companyResponse, flightRequest);
+            FlightDto flightDto = createFlightResponseAssembler(planeResponse,
+                    airportResponse,
+                    companyResponse,
+                    flightRequest,
+                    aviationEventResponse);
             flightRepository.save(flightMapper.mapToEntity(flightDto));
 
             FlightResponseForReport flightForReport = makeFlightReportObjectFromDto(flightDto, flightRequest);
@@ -166,6 +176,27 @@ public class FlightServiceImpl implements FlightService {
 
     }
 
+    @KafkaListener(topics = AVIATION_EVENT_TOPIC, groupId = "aviation-event-service-consumer-group")
+    public void listenAviationEventsResponse(String response) {
+
+        log.info("Received Aviation Event response: {}", response);
+
+        try {
+            AviationEventResponse aviationEventResponse = objectMapper.readValue(response, AviationEventResponse.class);
+
+            TopicResponse aviationEventTopicResponse = new TopicResponse();
+            aviationEventTopicResponse.setFlightCode(aviationEventResponse.getFlightCode());
+            aviationEventTopicResponse.setTopic(AVIATION_EVENT_TOPIC);
+            aviationEventTopicResponse.setResponse(response);
+
+            topicRepository.save(aviationEventTopicResponse);
+            aviationEventResponseFuture.complete(aviationEventTopicResponse);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     private BigDecimal calculateDistanceBetweenAirportsInKm(Airport departure, Airport arrival) {
 
         StringBuilder sb = new StringBuilder();
@@ -219,7 +250,8 @@ public class FlightServiceImpl implements FlightService {
     private FlightDto createFlightResponseAssembler(PlaneResponse planeResponse,
                                                     AirportApiResponse airportResponse,
                                                     CompanyResponse companyResponse,
-                                                    FlightRequest flightRequest) {
+                                                    FlightRequest flightRequest,
+                                                    AviationEventResponse aviationEventResponse) {
 
         FlightDto flightDto = new FlightDto();
 
@@ -279,6 +311,7 @@ public class FlightServiceImpl implements FlightService {
 
         flightDto.setArrivalTime(calculateArrivalTime(flightDto.getDepartureTime(), flightDto.getFlightDurationInMinutes()));
 
+        flightDto.setEvents(aviationEventResponse.getEvents());
         return flightDto;
     }
 

@@ -24,5 +24,6 @@ public class FlightReport {
     private Company company;
     private double flightDistanceKm;
     private double flightDurationInMinutes;
+    private String events;
 }
 

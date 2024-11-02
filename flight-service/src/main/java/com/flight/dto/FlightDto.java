@@ -31,6 +31,7 @@ public class FlightDto {
     private CompanyDetails company;
     private BigDecimal flightDistanceKm;
     private BigDecimal flightDurationInMinutes;
+    private String events;
 
 
     public PassengerDTO getPassenger() {
@@ -151,5 +152,13 @@ public class FlightDto {
 
     public void setFlightDurationInMinutes(BigDecimal flightDurationInMinutes) {
         this.flightDurationInMinutes = flightDurationInMinutes;
+    }
+
+    public String getEvents() {
+        return events;
+    }
+
+    public void setEvents(String events) {
+        this.events = events;
     }
 }
