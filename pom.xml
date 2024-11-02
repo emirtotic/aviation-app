@@ -20,6 +20,7 @@
         <module>company-service</module>
         <module>report-service</module>
         <module>api-gateway</module>
+        <module>aviation-events-service</module>
     </modules>
 
     <dependencyManagement>
