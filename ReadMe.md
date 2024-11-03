@@ -45,6 +45,3 @@
 
 <h2>Conclusion</h2>
 <p>This project is a robust example of a microservice application focusing on performance, scalability, and ease of maintenance. Using modern technologies and best practices, the application is built to work with complex aviation industry data and provides a stable foundation for further development and customization according to specific business needs.</p>
-
-</body>
-</html>
