@@ -3,14 +3,14 @@ package com.plane.mapper;
 import com.plane.dto.PlaneDTO;
 import com.plane.entity.Plane;
 import com.plane.enums.PlaneType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class PlaneMapperTest {
 

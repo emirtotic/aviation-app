@@ -4,7 +4,6 @@ import com.plane.dto.PlaneDTO;
 import com.plane.entity.Plane;
 import com.plane.enums.PlaneType;
 import com.plane.exception.PlaneNotFoundException;
-import com.plane.kafka.FlightApiRequest;
 import com.plane.mapper.PlaneMapper;
 import com.plane.repository.PlaneRepository;
 import com.plane.service.PlaneService;

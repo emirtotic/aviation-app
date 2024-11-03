@@ -1,7 +1,5 @@
 package com.flight.entity;
 
-import com.flight.enums.Gender;
-import com.flight.enums.Title;
 import lombok.*;
 
 import javax.persistence.*;

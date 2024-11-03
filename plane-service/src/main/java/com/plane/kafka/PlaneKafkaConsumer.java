@@ -3,7 +3,6 @@ package com.plane.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plane.dto.PlaneDTO;
-import com.plane.entity.Plane;
 import com.plane.service.PlaneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

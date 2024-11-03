@@ -18,6 +18,7 @@
   <li><strong>MapStruct</strong>: Used for object mapping within the code.</li>
   <li><strong>Flyway</strong>: Used for initializing data in the MySQL database at application startup.</li>
   <li><strong>Swagger</strong> (Springfox and Springdoc): API documentation for each microservice.</li>
+  <li><strong>Unit Testing</strong>: JUnit 5 was used for test management, and Mockito was used for mocking dependencies.</li>
   <li><strong>Jsoup</strong>: Used for parsing HTML content and extracting historical events for a given date.</li>
   <li><strong>Jackson</strong>: For JSON data serialization and deserialization, with additional <code>@JsonFormat</code> configurations for date formats.</li>
   <li><strong>Lombok</strong>: Reduces boilerplate code in DTO classes by automatically generating getters and setters.</li>
