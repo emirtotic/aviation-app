@@ -88,7 +88,7 @@ public class FlightServiceImpl implements FlightService {
             throw new RuntimeException(e);
         }
 
-        if (airportResponse != null && planeResponse != null) {
+        if (airportResponse != null && planeResponse != null && companyResponse != null && aviationEventResponse != null) {
 
             FlightDto flightDto = createFlightResponseAssembler(planeResponse,
                     airportResponse,

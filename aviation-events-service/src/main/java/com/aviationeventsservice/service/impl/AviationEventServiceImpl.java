@@ -7,7 +7,6 @@ import com.aviationeventsservice.repository.AviationEventRepository;
 import com.aviationeventsservice.service.AviationEventFetcherService;
 import com.aviationeventsservice.service.AviationEventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,16 +45,18 @@ public class AviationEventServiceImpl implements AviationEventService {
             if (dbResponse == null) {
                 log.info("No data fetched from db. Redirecting to API...");
                 String response = fetcherService.fetchAviationEvents(requestDate);
-                AviationEvent newEvent = new AviationEvent();
-                newEvent.setDate(requestDate);
-                newEvent.setEvents(response);
-                repository.save(newEvent);
+
+                if (response != null && !response.isEmpty()) {
+                    AviationEvent newEvent = new AviationEvent();
+                    newEvent.setDate(requestDate);
+                    newEvent.setEvents(response);
+                    repository.save(newEvent);
+                }
 
                 flightApiResponse.setEvents(response);
                 kafkaTemplate.send("aviation-event-response", objectMapper.writeValueAsString(flightApiResponse));
 
                 return response;
-
             }
 
             flightApiResponse.setEvents(dbResponse.getEvents());
