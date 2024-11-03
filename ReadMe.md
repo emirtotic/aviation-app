@@ -15,6 +15,8 @@
   <li><strong>Kafka</strong>: Asynchronous communication between services for exchanging data across different microservices (flight-service, airport-service, plane-service, company-service, and aviation-events-service).</li>
   <li><strong>Eureka Server</strong>: For registering and discovering microservices.</li>
   <li><strong>Spring Cloud Gateway</strong>: Gateway server for centralized management of access to various services.</li>
+  <li><strong>MapStruct</strong>: Used for object mapping within the code.</li>
+  <li><strong>Flyway</strong>: Used for initializing data in the MySQL database at application startup.</li>
   <li><strong>Swagger</strong> (Springfox and Springdoc): API documentation for each microservice.</li>
   <li><strong>Jsoup</strong>: Used for parsing HTML content and extracting historical events for a given date.</li>
   <li><strong>Jackson</strong>: For JSON data serialization and deserialization, with additional <code>@JsonFormat</code> configurations for date formats.</li>
@@ -23,8 +25,6 @@
 
 <h2>Microservice Structure</h2>
 <ul>
-  <li><strong>MapStruct</strong>: Used for object mapping within the code.</li>
-  <li><strong>Flyway</strong>: Used for initializing data in the MySQL database at application startup.</li>
   <li><strong>Plane Service</strong>: Collects and stores information about aircraft, including average plane speed, in a MySQL database.</li>
   <li><strong>Airport Service</strong>: Contains airport information, implemented with MongoDB, and allows for country-based searching. Data is integrated from an existing third-party API.</li>
   <li><strong>Company Service</strong>: Stores details about airlines and uses MySQL. It communicates asynchronously with the plane service to retrieve the company fleet’s aircraft.</li>
