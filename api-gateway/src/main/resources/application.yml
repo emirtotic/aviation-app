@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: gateway-service
+    version: "1.0"
   cloud:
     gateway:
       discovery:

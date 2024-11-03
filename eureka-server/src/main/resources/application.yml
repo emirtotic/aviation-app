@@ -9,3 +9,4 @@ eureka:
 spring:
   application:
     name: eureka-server
+    version: "1.0"
