@@ -23,4 +23,9 @@ public class TopicServiceImpl implements TopicService {
     public TopicResponse findByFlightCodeAndTopic(String flightCode, String topic) {
         return topicRepository.findByFlightCodeAndTopic(flightCode, topic);
     }
+
+    @Override
+    public TopicResponse save(TopicResponse topicResponse) {
+        return topicRepository.save(topicResponse);
+    }
 }

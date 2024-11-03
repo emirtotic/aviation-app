@@ -6,5 +6,6 @@ public interface TopicService {
 
     TopicResponse findByFlightCode(String flightCode);
     TopicResponse findByFlightCodeAndTopic(String flightCode, String topic);
+    TopicResponse save(TopicResponse topicResponse);
 
 }

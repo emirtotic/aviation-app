@@ -13,7 +13,6 @@ import com.flight.kafka.*;
 import com.flight.mapper.FlightMapper;
 import com.flight.mapper.PassengerMapper;
 import com.flight.reposirory.FlightRepository;
-import com.flight.reposirory.TopicRepository;
 import com.flight.service.FlightResponseForReportService;
 import com.flight.service.FlightService;
 import com.flight.service.TopicService;
@@ -35,7 +34,6 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class FlightServiceImpl implements FlightService {
 
-    private final TopicRepository topicRepository;
     @Value("${spring.kafka.topics.flight-requests}")
     private String flightTopic;
     @Value("${spring.kafka.topics.report-requests}")
@@ -126,7 +124,7 @@ public class FlightServiceImpl implements FlightService {
             airportTopicResponse.setTopic(AIRPORT_TOPIC);
             airportTopicResponse.setResponse(response);
 
-            topicRepository.save(airportTopicResponse);
+            topicService.save(airportTopicResponse);
             airportResponseFuture.complete(airportTopicResponse);
 
         } catch (JsonProcessingException e) {
@@ -147,7 +145,7 @@ public class FlightServiceImpl implements FlightService {
             planeTopicResponse.setTopic(PLANE_TOPIC);
             planeTopicResponse.setResponse(response);
 
-            topicRepository.save(planeTopicResponse);
+            topicService.save(planeTopicResponse);
             planeResponseFuture.complete(planeTopicResponse);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -168,7 +166,7 @@ public class FlightServiceImpl implements FlightService {
             companyTopicResponse.setTopic(COMPANY_TOPIC);
             companyTopicResponse.setResponse(response);
 
-            topicRepository.save(companyTopicResponse);
+            topicService.save(companyTopicResponse);
             companyResponseFuture.complete(companyTopicResponse);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -189,7 +187,7 @@ public class FlightServiceImpl implements FlightService {
             aviationEventTopicResponse.setTopic(AVIATION_EVENT_TOPIC);
             aviationEventTopicResponse.setResponse(response);
 
-            topicRepository.save(aviationEventTopicResponse);
+            topicService.save(aviationEventTopicResponse);
             aviationEventResponseFuture.complete(aviationEventTopicResponse);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
