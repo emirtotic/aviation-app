@@ -62,63 +62,59 @@
             </textField>
             <textField textAdjust="StretchHeight">
                 <reportElement style="Normal" x="0" y="50" width="555" height="12" uuid="6007b682-2411-47d6-8ed1-78cb53cc3479"/>
-                <textFieldExpression><![CDATA["Title: " + $F{passenger.email}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Email: " + $F{passenger.email}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="65" width="555" height="12" uuid="6007b682-2411-47d6-8ed1-78cb53cc3479"/>
-                <textFieldExpression><![CDATA["Title: " + $F{passenger.title}]]></textFieldExpression>
-            </textField>
-            <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="80" width="555" height="12" uuid="19c56c4a-9a18-47e0-b637-736f44d2b5cc"/>
+                <reportElement style="Normal" x="0" y="65" width="555" height="12" uuid="19c56c4a-9a18-47e0-b637-736f44d2b5cc"/>
                 <textFieldExpression><![CDATA["Gender: " + $F{passenger.gender}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="95" width="555" height="12" uuid="33433c11-ad8c-492e-9e03-86ce5606d258"/>
+                <reportElement style="Normal" x="0" y="80" width="555" height="12" uuid="33433c11-ad8c-492e-9e03-86ce5606d258"/>
                 <textFieldExpression><![CDATA["Age: " + $F{passenger.age}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Subtitle" x="0" y="115" width="555" height="15" uuid="13e00b23-cd3b-4f7e-bc6b-3626989496cb"/>
+                <reportElement style="Subtitle" x="0" y="100" width="555" height="15" uuid="13e00b23-cd3b-4f7e-bc6b-3626989496cb"/>
                 <textElement textAlignment="Center"/>
                 <textFieldExpression><![CDATA["Flight Details"]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="130" width="555" height="12" uuid="3ed67fdc-a7f4-43f3-932b-d5f6e13da26f"/>
+                <reportElement style="Normal" x="0" y="125" width="555" height="12" uuid="3ed67fdc-a7f4-43f3-932b-d5f6e13da26f"/>
                 <textFieldExpression><![CDATA["Flight route: " + $F{departureAirportIata} + " to " + $F{arrivalAirportIata}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="145" width="555" height="12" uuid="3ed67fdc-a7f4-43f3-932b-d5f6e13da26f"/>
+                <reportElement style="Normal" x="0" y="140" width="555" height="12" uuid="3ed67fdc-a7f4-43f3-932b-d5f6e13da26f"/>
                 <textFieldExpression><![CDATA["Plane Model: " + $F{planeModel}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="160" width="555" height="12" uuid="f7992049-6a37-49aa-b6f2-bd3eae51ad4a"/>
+                <reportElement style="Normal" x="0" y="155" width="555" height="12" uuid="f7992049-6a37-49aa-b6f2-bd3eae51ad4a"/>
                 <textFieldExpression><![CDATA["Average Speed: " + $F{averagePlaneSpeed} + " km/h"]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="175" width="555" height="12" uuid="85cde490-606a-43e0-8fc9-ab2054cae4e1"/>
+                <reportElement style="Normal" x="0" y="170" width="555" height="12" uuid="85cde490-606a-43e0-8fc9-ab2054cae4e1"/>
                 <textFieldExpression><![CDATA["Departure Airport: " + $F{departureAirport} + " - " + $F{departureAirportCountry}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="190" width="555" height="12" uuid="b85d23c3-0d4c-483f-bb77-ac9eaee40bcf"/>
+                <reportElement style="Normal" x="0" y="185" width="555" height="12" uuid="b85d23c3-0d4c-483f-bb77-ac9eaee40bcf"/>
                 <textFieldExpression><![CDATA["Arrival Airport: " + $F{arrivalAirport} + " - " + $F{arrivalAirportCountry}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="205" width="555" height="12" uuid="3c35e818-b852-4de5-a24a-e79c16245eb4"/>
+                <reportElement style="Normal" x="0" y="200" width="555" height="12" uuid="3c35e818-b852-4de5-a24a-e79c16245eb4"/>
                 <textFieldExpression><![CDATA["Flight Created At: " + $F{createdAt}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="220" width="555" height="12" uuid="3c35e818-b852-4de5-a24a-e79c16245eb4"/>
+                <reportElement style="Normal" x="0" y="215" width="555" height="12" uuid="3c35e818-b852-4de5-a24a-e79c16245eb4"/>
                 <textFieldExpression><![CDATA["Departure Time: " + $F{departureTime}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="235" width="555" height="12" uuid="3c35e818-b852-4de5-a24a-e79c16245eb4"/>
+                <reportElement style="Normal" x="0" y="230" width="555" height="12" uuid="3c35e818-b852-4de5-a24a-e79c16245eb4"/>
                 <textFieldExpression><![CDATA["Arrival Time: " + $F{arrivalTime}]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="250" width="555" height="12" uuid="3c35e818-b852-4de5-a24a-e79c16245eb4"/>
+                <reportElement style="Normal" x="0" y="245" width="555" height="12" uuid="3c35e818-b852-4de5-a24a-e79c16245eb4"/>
                 <textFieldExpression><![CDATA["Distance: " + $F{flightDistanceKm} + " km"]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">
-                <reportElement style="Normal" x="0" y="265" width="555" height="12" uuid="6b35f429-cd0a-4dbf-a8b6-c715f8a6d3ec"/>
+                <reportElement style="Normal" x="0" y="260" width="555" height="12" uuid="6b35f429-cd0a-4dbf-a8b6-c715f8a6d3ec"/>
                 <textFieldExpression><![CDATA["Duration: " + $F{flightDurationInMinutes} + " minutes"]]></textFieldExpression>
             </textField>
             <textField textAdjust="StretchHeight">

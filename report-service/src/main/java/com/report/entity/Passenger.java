@@ -13,5 +13,6 @@ public class Passenger {
     private String lastName;
     private String title;
     private String gender;
+    private String email;
     private int age;
 }
