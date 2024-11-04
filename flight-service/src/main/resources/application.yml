@@ -33,6 +33,18 @@ spring:
       aviation-event-response: aviation-event-response
 
 
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 57a4d32caf422a
+    password: 9ab22fe4a1f3e5
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
+
 eureka:
   client:
     service-url:

@@ -13,6 +13,7 @@ import com.flight.kafka.*;
 import com.flight.mapper.FlightMapper;
 import com.flight.mapper.PassengerMapper;
 import com.flight.reposirory.FlightRepository;
+import com.flight.service.EmailService;
 import com.flight.service.FlightResponseForReportService;
 import com.flight.service.FlightService;
 import com.flight.service.TopicService;
@@ -46,6 +47,7 @@ public class FlightServiceImpl implements FlightService {
     private final FlightMapper flightMapper;
     private final PassengerMapper passengerMapper;
     private final FlightResponseForReportService flightResponseForReportService;
+    private final EmailService emailService;
 
     private final String AIRPORT_TOPIC = "airport-response";
     private final String PLANE_TOPIC = "plane-response";
@@ -103,6 +105,11 @@ public class FlightServiceImpl implements FlightService {
             FlightResponseForReport reportDetails = flightResponseForReportService.findById(flightForReport.getId());
 
             flightKafkaProducer.sendReportDetails(reportTopic, reportDetails);
+
+            String toEmail = flightRequest.getPassenger().getEmail();
+            String subject = "Your flight has been booked!";
+
+            emailService.sendFlightCreationEmail(toEmail, subject, createEmailText(flightDto));
 
             return flightDto;
         }
@@ -304,6 +311,7 @@ public class FlightServiceImpl implements FlightService {
                                 .title(flightRequest.getPassenger().getTitle())
                                 .gender(flightRequest.getPassenger().getGender())
                                 .age(flightRequest.getPassenger().getAge())
+                                .email(flightRequest.getPassenger().getEmail())
                                 .build()));
 
 
@@ -333,5 +341,28 @@ public class FlightServiceImpl implements FlightService {
             throw new RuntimeException(e);
         }
         return ffr;
+    }
+
+    private String createEmailText(FlightDto flightDto) {
+
+        StringBuilder emailBody = new StringBuilder();
+
+        emailBody.append("Dear ").append(flightDto.getPassenger().getTitle()).append(" ")
+                .append(flightDto.getPassenger().getFirstName()).append(" ")
+                .append(flightDto.getPassenger().getLastName()).append(", \n\n")
+                .append("Your flight from ").append(flightDto.getDepartureAirport())
+                .append(" (").append(flightDto.getDepartureAirportCountry()).append(")")
+                .append(" to ").append(flightDto.getArrivalAirport())
+                .append(" (").append(flightDto.getArrivalAirportCountry()).append(") ")
+                .append("has been successfully booked.\n")
+                .append("Estimated time of the flight is ").append(flightDto.getFlightDurationInMinutes())
+                .append(" minutes, and your departure time is ").append(flightDto.getDepartureTime()).append(".")
+                .append("\n\n\n")
+                .append("Thank you for using our service. \n\n")
+                .append(flightDto.getCompany().getName()).append(" wish you pleasant and safe flight with our comfortable ")
+                .append(flightDto.getPlaneModel()).append(". \n\n\n")
+                .append("Kind regards, \nyour AVIATION APP.");
+
+        return emailBody.toString();
     }
 }

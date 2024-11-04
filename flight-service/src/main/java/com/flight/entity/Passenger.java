@@ -22,6 +22,7 @@ public class Passenger {
     private String title;
     private Gender gender;
     private int age;
+    private String email;
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight;
