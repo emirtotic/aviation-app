@@ -89,6 +89,14 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
+    public List<AirportDTO> findAirportByCountry(String country) {
+
+        List<Airport> airports = airportRepository.findAllByCountry(country);
+
+        return airportMapper.mapToDTO(airports);
+    }
+
+    @Override
     public BigDecimal calculateFlightDuration(String iata1, String iata2) {
 
         Airport airport1 = Optional.ofNullable(airportRepository.findByIata(iata1.toUpperCase()))

@@ -14,6 +14,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -67,5 +69,11 @@ public class AviationEventServiceImpl implements AviationEventService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String fetchAviationEventsLocally(String date) {
+        return Optional.ofNullable(fetcherService.fetchAviationEvents(date))
+                .orElse("Unable to retrieve Aviation events.");
     }
 }

@@ -29,6 +29,12 @@ public class AirportController {
         return new ResponseEntity<>(airportDTOS, HttpStatus.OK);
     }
 
+    @PostMapping("/country")
+    public ResponseEntity<List<AirportDTO>> findAirports(@RequestParam(name = "country") String country) {
+        List<AirportDTO> airportDTOS = airportService.findAirportByCountry(country);
+        return new ResponseEntity<>(airportDTOS, HttpStatus.OK);
+    }
+
     @PostMapping("/calculate-distance")
     public ResponseEntity<String> calculateDistanceInKm(@RequestParam String iata1, @RequestParam String iata2) {
         BigDecimal distance = airportService.calculateDistanceBetweenAirportsInKm(iata1, iata2);

@@ -19,7 +19,7 @@ public class AviationEventServiceController {
     @GetMapping("/date")
     public ResponseEntity<String> getAviationEvents(@RequestParam String date) {
 
-        String response = aviationEventService.fetchAviationEvents(date);
+        String response = aviationEventService.fetchAviationEventsLocally(date);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
