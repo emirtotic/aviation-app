@@ -40,7 +40,7 @@ public class PlaneController {
             @ApiResponse(responseCode = "404", description = "No planes found for the specified type"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PostMapping("/all/type/{type}")
+    @GetMapping("/all/type/{type}")
     public ResponseEntity<List<PlaneDTO>> findAllByType(@PathVariable String type) {
 
         List<PlaneDTO> planeDTOList = planeService.findAllPlanesByType(type);

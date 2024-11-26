@@ -68,6 +68,7 @@ public class PlaneServiceImpl implements PlaneService {
     }
 
     @Override
+    @CacheEvict(value = "planes", allEntries = true)
     public PlaneDTO createNewPlane(PlaneDTO planeDTO) {
 
         Plane plane = Plane.builder()
